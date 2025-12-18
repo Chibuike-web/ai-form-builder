@@ -1,8 +1,8 @@
 import { db } from "@/db";
-import { schemaAgent } from "./schema-agent";
-import { uiFieldAgent } from "./ui-field-agent";
 import { form } from "@/db/schemas/form";
-import { formTitleAgent } from "./form-title-agent";
+import { generateSchema } from "./generate-schema";
+import { generateFormTitle } from "./generate-form-title";
+import { generateUIField } from "./generate-ui-field";
 
 export async function POST(req: Request) {
 	try {
@@ -14,7 +14,10 @@ export async function POST(req: Request) {
 			});
 		}
 
-		const [titleRes, schemaRes] = await Promise.all([formTitleAgent(input), schemaAgent(input)]);
+		const [titleRes, schemaRes] = await Promise.all([
+			generateFormTitle(input),
+			generateSchema(input),
+		]);
 
 		if (!titleRes.ok || !titleRes.title) {
 			return new Response(JSON.stringify({ status: "failed", error: titleRes.error }), {
@@ -32,7 +35,7 @@ export async function POST(req: Request) {
 			);
 		}
 
-		const uiRes = await uiFieldAgent(schemaRes.schema);
+		const uiRes = await generateUIField(schemaRes.schema);
 
 		if (!uiRes.ok || !uiRes.ui) {
 			return new Response(

@@ -144,7 +144,7 @@ const model = wrapLanguageModel({
 	model: gateway("openai/gpt-4.1-nano"),
 	middleware: devToolsMiddleware(),
 });
-export async function schemaAgent(userInput: string) {
+export async function generateSchema(userInput: string) {
 	try {
 		const { text } = await generateText({
 			model,

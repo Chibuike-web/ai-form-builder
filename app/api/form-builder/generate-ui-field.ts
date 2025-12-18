@@ -92,7 +92,7 @@ const model = wrapLanguageModel({
 	model: gateway("openai/gpt-4.1-nano"),
 	middleware: devToolsMiddleware(),
 });
-export async function uiFieldAgent(schema: string) {
+export async function generateUIField(schema: string) {
 	const prompt = `
 Convert this JSON schema into UI field configuration.
 

@@ -29,7 +29,7 @@ const model = wrapLanguageModel({
 	middleware: devToolsMiddleware(),
 });
 
-export async function formTitleAgent(userPrompt: string) {
+export async function generateFormTitle(userPrompt: string) {
 	const prompt = `
 Generate a concise title for the following form description:
 
