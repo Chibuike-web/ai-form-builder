@@ -25,6 +25,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import Link from "next/link";
 
 export type UIType = {
 	id: string;
@@ -99,7 +100,11 @@ export default function FormBuilderClient() {
 							name="input"
 							onInput={() => setError("")}
 						/>
-						<Button className="w-full" disabled={isPending} type="submit">
+						<Button
+							className="w-full transition-all duration-150 ease-in-out active:scale-95"
+							disabled={isPending}
+							type="submit"
+						>
 							{isPending ? "Creating..." : "Create"}
 						</Button>
 					</form>
@@ -272,26 +277,30 @@ export default function FormBuilderClient() {
 								}
 							})}
 						</div>
-
-						<Dialog>
-							<DialogTrigger asChild>
-								<Button type="button" className="w-full mt-10">
-									Share Form Link
-								</Button>
-							</DialogTrigger>
-
-							<DialogContent>
-								<DialogTitle>
-									<DialogHeader>Share the link with anybody</DialogHeader>
-								</DialogTitle>
-								<div className="mt-4 flex items-center gap-2">
-									<Input readOnly value={shareUrl} className="flex-1" />
-									<Button type="button" onClick={() => navigator.clipboard.writeText(shareUrl)}>
-										Copy
+						<div className="flex gap-2 mt-10">
+							<Dialog>
+								<DialogTrigger asChild>
+									<Button type="button" className="flex-1">
+										Share Form Link
 									</Button>
-								</div>
-							</DialogContent>
-						</Dialog>
+								</DialogTrigger>
+
+								<DialogContent>
+									<DialogTitle>
+										<DialogHeader>Share the link with anybody</DialogHeader>
+									</DialogTitle>
+									<div className="mt-4 flex items-center gap-2">
+										<Input readOnly value={shareUrl} className="flex-1" />
+										<Button type="button" onClick={() => navigator.clipboard.writeText(shareUrl)}>
+											Copy
+										</Button>
+									</div>
+								</DialogContent>
+							</Dialog>
+							<Button asChild className="flex-1" variant="outline">
+								<Link href="/responses">View responses</Link>
+							</Button>
+						</div>
 					</>
 				)}
 			</form>

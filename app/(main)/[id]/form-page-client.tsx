@@ -456,7 +456,10 @@ export default function FormPageClient({ ui }: { ui: UIType[] }) {
 						})}
 					</div>
 
-					<Button type="submit" className="w-full mt-10">
+					<Button
+						type="submit"
+						className="w-full mt-10 transition-all duration-150 ease-in-out active:scale-95"
+					>
 						Submit
 					</Button>
 				</>

@@ -9,7 +9,7 @@ import { UIType } from "../form-builder-client";
 export default async function FormPage({ params }: { params: Promise<{ id: string }> }) {
 	return (
 		<main className="max-w-xl mx-auto py-10 px-6 xl:px-0">
-			<Suspense>
+			<Suspense fallback={<Loading />}>
 				<Main params={params} />
 			</Suspense>
 		</main>
@@ -39,5 +39,21 @@ const Main = async ({ params }: { params: Promise<{ id: string }> }) => {
 				<FormPageClient ui={uiSchema.fields} />
 			</ClientOnly>
 		</>
+	);
+};
+
+const Loading = () => {
+	return (
+		<div className="space-y-6">
+			<div className="h-6 w-40 bg-gray-300 rounded" />
+			<div className="h-12 w-full bg-gray-300 rounded" />
+			<div className="h-6 w-40 bg-gray-300 rounded" />
+			<div className="h-12 w-full bg-gray-300 rounded" />
+			<div className="h-6 w-40 bg-gray-300 rounded" />
+			<div className="h-12 w-full bg-gray-300 rounded" />
+			<div className="h-6 w-40 bg-gray-300 rounded" />
+			<div className="h-32 w-full bg-gray-300 rounded" />
+			<div className="h-10 w-32 bg-gray-300 rounded" />
+		</div>
 	);
 };
