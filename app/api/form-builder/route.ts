@@ -3,6 +3,7 @@ import { form } from "@/db/schemas/form";
 import { generateSchema } from "./generate-schema";
 import { generateFormTitle } from "./generate-form-title";
 import { generateUIField } from "./generate-ui-field";
+import { revalidateTag } from "next/cache";
 
 export async function POST(req: Request) {
 	try {
@@ -58,6 +59,8 @@ export async function POST(req: Request) {
 				uiSchema: uiRes.ui,
 			})
 			.returning({ id: form.id });
+
+		revalidateTag("forms", "max");
 
 		return new Response(
 			JSON.stringify({
