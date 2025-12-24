@@ -3,6 +3,7 @@ import { db } from "@/db";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cacheLife, cacheTag } from "next/cache";
+import DeleteButton from "./components/delete-button";
 
 export default function FormBuilder() {
 	return (
@@ -27,23 +28,27 @@ const Forms = async () => {
 		},
 	});
 	return (
-		<>
-			<div className="w-full">
-				<h2 className="text-2xl font-semibold mb-4">Forms</h2>
-				{results.map((form) => (
-					<div key={form.id} className="mb-4">
-						<h3 className="text-xl font-semibold mb-2">{form.title}</h3>
-						<p className="text-muted-foreground">{form.prompt}</p>
-						<Button className="mt-2" asChild>
-							<Link href={`/${form.id}`}>View</Link>
+		<div className="w-full">
+			<h2 className="text-2xl font-semibold mb-4">Forms</h2>
+			{results.map((form) => (
+				<div key={form.id} className="mb-4">
+					<h3 className="text-xl font-semibold mb-2">{form.title}</h3>
+					<p className="text-muted-foreground">{form.prompt}</p>
+					<div className="flex gap-2 mt-4">
+						<Button asChild>
+							<Link
+								href={`/responses/${form.id}`}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="flex-1"
+							>
+								View Responses
+							</Link>
 						</Button>
+						<DeleteButton id={form.id} />
 					</div>
-				))}
-			</div>
-		</>
+				</div>
+			))}
+		</div>
 	);
-};
-
-const Loading = () => {
-	return <div className="flex items-center justify-center h-full w-full"></div>;
 };

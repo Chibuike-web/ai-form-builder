@@ -1,4 +1,3 @@
-import ClientOnly from "@/components/client-only";
 import FormPageClient from "./form-page-client";
 import { Suspense } from "react";
 import { db } from "@/db";
@@ -35,25 +34,11 @@ const Main = async ({ params }: { params: Promise<{ id: string }> }) => {
 	return (
 		<>
 			<h2 className="text-2xl font-semibold mb-4">{title}</h2>
-			<ClientOnly>
-				<FormPageClient ui={uiSchema.fields} />
-			</ClientOnly>
+			<FormPageClient ui={uiSchema.fields} />
 		</>
 	);
 };
 
 const Loading = () => {
-	return (
-		<div className="space-y-6">
-			<div className="h-6 w-40 bg-gray-300 rounded" />
-			<div className="h-12 w-full bg-gray-300 rounded" />
-			<div className="h-6 w-40 bg-gray-300 rounded" />
-			<div className="h-12 w-full bg-gray-300 rounded" />
-			<div className="h-6 w-40 bg-gray-300 rounded" />
-			<div className="h-12 w-full bg-gray-300 rounded" />
-			<div className="h-6 w-40 bg-gray-300 rounded" />
-			<div className="h-32 w-full bg-gray-300 rounded" />
-			<div className="h-10 w-32 bg-gray-300 rounded" />
-		</div>
-	);
+	return <div className="space-y-6"></div>;
 };

@@ -42,6 +42,7 @@
 		"drizzle-kit": "^0.31.8",
 		"eslint": "^9",
 		"eslint-config-next": "16.1.1",
+		"eslint-plugin-react-hooks": "^7.0.1",
 		"tailwindcss": "^4",
 		"typescript": "^5"
 	}

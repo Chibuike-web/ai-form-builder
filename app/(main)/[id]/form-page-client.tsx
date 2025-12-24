@@ -167,14 +167,21 @@ export default function FormPageClient({ ui }: { ui: UIType[] }) {
 		}
 
 		const formData = {
-			date: dates,
-			text: texts,
-			number: numbers,
-			file: files,
-			textArea: textAreas,
+			...dates,
+			...texts,
+			...numbers,
+			...files,
+			...textAreas,
+			...selects,
+			...radios,
+			...checkboxes,
 		};
 
-		console.log(formData);
+		const responses = ui.map((i) => ({
+			id: i.id,
+			value: formData[i.id] === "" ? null : formData[i.id],
+		}));
+		console.log(responses);
 	};
 
 	return (

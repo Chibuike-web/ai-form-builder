@@ -1,5 +1,4 @@
-import { devToolsMiddleware } from "@ai-sdk/devtools";
-import { gateway, generateText, wrapLanguageModel } from "ai";
+import { generateText } from "ai";
 
 const systemPrompt = `
 You generate form titles.
@@ -24,11 +23,6 @@ GUIDELINES:
 - Prefer nouns over verbs.
 `;
 
-const model = wrapLanguageModel({
-	model: gateway("openai/gpt-4.1-nano"),
-	middleware: devToolsMiddleware(),
-});
-
 export async function generateFormTitle(userPrompt: string) {
 	const prompt = `
 Generate a concise title for the following form description:
@@ -38,7 +32,7 @@ ${userPrompt}
 
 	try {
 		const { text } = await generateText({
-			model,
+			model: "openai/gpt-4.1-nano",
 			system: systemPrompt,
 			prompt,
 		});

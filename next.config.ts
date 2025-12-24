@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
 			fullUrl: true,
 		},
 	},
+	experimental: {
+		turbopackFileSystemCacheForBuild: true,
+	},
 	typedRoutes: true,
 };
 

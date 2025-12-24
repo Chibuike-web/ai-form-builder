@@ -72,7 +72,7 @@ export async function POST(req: Request) {
 			{ status: 200 }
 		);
 	} catch (error) {
-		return new Response(JSON.stringify({ status: "failed", error: "Unexpected error" }), {
+		return new Response(JSON.stringify({ status: "failed", error: error || "Unexpected error" }), {
 			status: 500,
 		});
 	}

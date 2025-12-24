@@ -1,6 +1,5 @@
-import { gateway, generateText, Output, wrapLanguageModel } from "ai";
+import { generateText, Output } from "ai";
 import { uiFieldSchema } from "./ui-field-schema";
-import { devToolsMiddleware } from "@ai-sdk/devtools";
 
 const systemPrompt = `
 You generate UI form configuration based on a JSON schema.
@@ -88,10 +87,6 @@ STRICT MAPPING RULES:
     - Never use checkbox for yes/no or true/false questions.
 `;
 
-const model = wrapLanguageModel({
-	model: gateway("openai/gpt-4.1-nano"),
-	middleware: devToolsMiddleware(),
-});
 export async function generateUIField(schema: string) {
 	const prompt = `
 Convert this JSON schema into UI field configuration.
@@ -102,7 +97,7 @@ ${schema}
 
 	try {
 		const result = await generateText({
-			model,
+			model: "openai/gpt-4.1-nano",
 			system: systemPrompt,
 			prompt,
 			output: Output.object({
