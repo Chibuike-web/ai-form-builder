@@ -14,13 +14,14 @@ import {
 } from "@/components/ui/select";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ChevronDownIcon } from "lucide-react";
+import { ChevronDownIcon, Loader2 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { FormEvent, useState } from "react";
+import { FormEvent, useTransition, useState } from "react";
 import type { UIType } from "../form-builder-client";
+import { saveResponseAction } from "../actions/save-response-action";
 
-export default function FormPageClient({ ui }: { ui: UIType[] }) {
+export default function FormPageClient({ ui, id }: { ui: UIType[]; id: string }) {
 	const [dates, setDates] = useState<Record<string, Date | undefined>>({});
 	const [texts, setTexts] = useState<Record<string, string>>({});
 	const [numbers, setNumbers] = useState<Record<string, string>>({});
@@ -30,6 +31,7 @@ export default function FormPageClient({ ui }: { ui: UIType[] }) {
 	const [checkboxes, setCheckboxes] = useState<Record<string, string[]>>({});
 	const [selects, setSelects] = useState<Record<string, string>>({});
 	const [radios, setRadios] = useState<Record<string, string>>({});
+	const [isPending, startTransition] = useTransition();
 
 	const handleDate = (id: string, value: Date | undefined) => {
 		setDates((prev) => ({
@@ -85,7 +87,7 @@ export default function FormPageClient({ ui }: { ui: UIType[] }) {
 			[id]: value,
 		}));
 	};
-	const handleFormSubmit = (e: FormEvent) => {
+	const handleFormSubmit = async (e: FormEvent) => {
 		console.log("Error");
 		setErrors({});
 		e.preventDefault();
@@ -136,7 +138,7 @@ export default function FormPageClient({ ui }: { ui: UIType[] }) {
 					break;
 				}
 				case "radio": {
-					const value = texts[field.id];
+					const value = radios[field.id];
 					if (!value) {
 						newErrors[field.id] = `This field is required`;
 					}
@@ -177,11 +179,14 @@ export default function FormPageClient({ ui }: { ui: UIType[] }) {
 			...checkboxes,
 		};
 
-		const responses = ui.map((i) => ({
+		const data = ui.map((i) => ({
 			id: i.id,
+			label: i.label,
 			value: formData[i.id] === "" ? null : formData[i.id],
 		}));
-		console.log(responses);
+		startTransition(async () => {
+			await saveResponseAction(id, data);
+		});
 	};
 
 	return (
@@ -365,7 +370,12 @@ export default function FormPageClient({ ui }: { ui: UIType[] }) {
 								case "select":
 									return (
 										<div key={u.id} className="w-full">
-											<Label htmlFor={u.id}>{u.label}</Label>
+											<div className="flex items-center gap-1 mb-2">
+												<Label htmlFor={u.id}>{u.label}</Label>
+												<span className="text-[14px] text-muted-foreground">
+													{u.required && "(required)"}
+												</span>
+											</div>
 											<Select
 												name={u.id}
 												onValueChange={(value) => {
@@ -400,7 +410,12 @@ export default function FormPageClient({ ui }: { ui: UIType[] }) {
 								case "radio":
 									return (
 										<div key={u.id}>
-											<p className="mb-2 font-medium">{u.label}</p>
+											<div className="flex items-center gap-1 mb-2">
+												<p className="font-medium">{u.label}</p>
+												<span className="text-[14px] text-muted-foreground">
+													{u.required && "(required)"}
+												</span>
+											</div>
 											<RadioGroup
 												name={u.id}
 												onValueChange={(value) => {
@@ -465,9 +480,10 @@ export default function FormPageClient({ ui }: { ui: UIType[] }) {
 
 					<Button
 						type="submit"
+						disabled={isPending}
 						className="w-full mt-10 transition-all duration-150 ease-in-out active:scale-95"
 					>
-						Submit
+						{isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Submit"}
 					</Button>
 				</>
 			)}

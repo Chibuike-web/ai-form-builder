@@ -3,7 +3,7 @@ import ResponseClient from "./response-client";
 import { Suspense } from "react";
 import { eq } from "drizzle-orm";
 import { UIType } from "../../form-builder-client";
-import { form } from "@/db/schemas";
+import { form, response } from "@/db/schemas";
 
 export default function Responses({ params }: { params: Promise<{ id: string }> }) {
 	return (
@@ -28,5 +28,19 @@ const Form = async ({ params }: { params: Promise<{ id: string }> }) => {
 
 	const uiSchema = result.uiSchema as { fields: UIType[] };
 	const title = result.title;
-	return <ResponseClient ui={uiSchema.fields} title={title} id={id} />;
+
+	const formResponses = await db.query.response.findMany({
+		where: eq(response.formId, id),
+		columns: {
+			id: true,
+			data: true,
+		},
+	});
+
+	const responses = formResponses.map((response) => ({
+		id: response.id,
+		data: typeof response.data === "string" ? JSON.parse(response.data) : response.data,
+	}));
+
+	return <ResponseClient ui={uiSchema.fields} title={title} id={id} responses={responses} />;
 };

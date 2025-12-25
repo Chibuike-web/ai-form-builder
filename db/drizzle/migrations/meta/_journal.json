@@ -29,6 +29,13 @@
       "when": 1765635861474,
       "tag": "0003_rare_miss_america",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1766633337279,
+      "tag": "0004_lovely_karma",
+      "breakpoints": true
     }
   ]
 }

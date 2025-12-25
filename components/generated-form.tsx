@@ -14,16 +14,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { ChevronDownIcon } from "lucide-react";
 import { toSentenceCase } from "@/lib/toSentenceCase";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function GeneratedForm({
 	ui,
 	title,
-	shareUrl,
+	formId,
 }: {
 	ui: UIType[];
 	title: string;
-	shareUrl: string;
+	formId: string;
 }) {
+	const shareUrl = `${process.env.NEXT_PUBLIC_URL}/${formId}`;
+	const pathname = usePathname();
 	const [date, setDate] = useState<Date | undefined>(undefined);
 	return (
 		<div className="w-full mt-10">
@@ -210,9 +213,11 @@ export default function GeneratedForm({
 								</div>
 							</DialogContent>
 						</Dialog>
-						<Button asChild className="flex-1" variant="outline">
-							<Link href="/responses">View responses</Link>
-						</Button>
+						{pathname.startsWith("/responses") ? null : (
+							<Button asChild className="flex-1" variant="outline">
+								<Link href={`/responses/${formId}`}>View responses</Link>
+							</Button>
+						)}
 					</div>
 				</>
 			)}

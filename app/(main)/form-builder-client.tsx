@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { FormEvent, useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import GeneratedForm from "@/components/generated-form";
+import { Loader2 } from "lucide-react";
 
 export type UIType = {
 	id: string;
@@ -24,7 +25,6 @@ export default function FormBuilderClient() {
 
 	const router = useRouter();
 
-	const shareUrl = `${process.env.NEXT_PUBLIC_URL}/${formId}`;
 	useEffect(() => {
 		inputRef.current?.focus();
 	}, []);
@@ -92,14 +92,14 @@ export default function FormBuilderClient() {
 						disabled={isPending}
 						type="submit"
 					>
-						{isPending ? "Creating..." : "Create"}
+						{isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Create"}
 					</Button>
 				</form>
 
 				{error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 			</div>
 
-			{ui.length > 0 && <GeneratedForm ui={ui} title={title} shareUrl={shareUrl} />}
+			{ui.length > 0 && <GeneratedForm ui={ui} title={title} formId={formId} />}
 		</div>
 	);
 }

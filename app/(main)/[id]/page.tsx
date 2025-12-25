@@ -34,7 +34,7 @@ const Main = async ({ params }: { params: Promise<{ id: string }> }) => {
 	return (
 		<>
 			<h2 className="text-2xl font-semibold mb-4">{title}</h2>
-			<FormPageClient ui={uiSchema.fields} />
+			<FormPageClient ui={uiSchema.fields} id={id} />
 		</>
 	);
 };
