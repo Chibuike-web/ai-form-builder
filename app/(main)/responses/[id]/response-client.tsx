@@ -40,13 +40,13 @@ export default function ResponseClient({
 				>
 					<Tabs.Tab
 						value="form"
-						className="data-[active]:bg-foreground/10 px-2 py-1 rounded-[4px]  focus-visible:outline-0 focus-visible:ring-2 focus-visible:ring-gray-700/5"
+						className="data-[active]:bg-white data-[active]:font-semibold px-2 py-1 rounded-[4px]  focus-visible:outline-0 focus-visible:ring-2 focus-visible:ring-gray-700/5"
 					>
 						Generated Form
 					</Tabs.Tab>
 					<Tabs.Tab
 						value="response"
-						className="data-[active]:bg-foreground/10 px-2 py-1 rounded-[4px] focus-visible:outline-0 focus-visible:ring-2 focus-visible:ring-gray-700/5"
+						className="data-[active]:bg-white data-[active]:font-semibold px-2 py-1 rounded-[4px] focus-visible:outline-0 focus-visible:ring-2 focus-visible:ring-gray-700/5"
 					>
 						Form Responses
 					</Tabs.Tab>

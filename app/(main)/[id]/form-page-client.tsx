@@ -20,6 +20,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FormEvent, useTransition, useState } from "react";
 import type { UIType } from "../form-builder-client";
 import { saveResponseAction } from "../actions/save-response-action";
+import { useRouter } from "next/navigation";
 
 export default function FormPageClient({ ui, id }: { ui: UIType[]; id: string }) {
 	const [dates, setDates] = useState<Record<string, Date | undefined>>({});
@@ -32,6 +33,7 @@ export default function FormPageClient({ ui, id }: { ui: UIType[]; id: string })
 	const [selects, setSelects] = useState<Record<string, string>>({});
 	const [radios, setRadios] = useState<Record<string, string>>({});
 	const [isPending, startTransition] = useTransition();
+	const router = useRouter();
 
 	const handleDate = (id: string, value: Date | undefined) => {
 		setDates((prev) => ({
@@ -88,7 +90,6 @@ export default function FormPageClient({ ui, id }: { ui: UIType[]; id: string })
 		}));
 	};
 	const handleFormSubmit = async (e: FormEvent) => {
-		console.log("Error");
 		setErrors({});
 		e.preventDefault();
 
@@ -187,6 +188,7 @@ export default function FormPageClient({ ui, id }: { ui: UIType[]; id: string })
 		startTransition(async () => {
 			await saveResponseAction(id, data);
 		});
+		router.replace(`/success/${id}`);
 	};
 
 	return (
