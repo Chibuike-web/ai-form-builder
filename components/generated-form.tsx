@@ -73,7 +73,7 @@ export default function GeneratedForm({
 													<Button
 														variant="outline"
 														id="date"
-														className="justify-between font-normal w-full text-[16px] text-muted-foreground hover:bg-white hover:text-muted-foreground"
+														className="justify-between font-normal w-full text-[14px] text-muted-foreground hover:bg-white hover:text-muted-foreground"
 													>
 														{date ? date.toDateString() : `Enter your ${u.label.toLowerCase()}`}
 														<ChevronDownIcon />
@@ -119,7 +119,7 @@ export default function GeneratedForm({
 										<div key={u.id} className="w-full">
 											<Label htmlFor={u.id}>{u.label}</Label>
 											<Select name={u.id} required={u.required}>
-												<SelectTrigger className="w-full mt-2 text-[16px] text-muted-foreground bg-white">
+												<SelectTrigger className="w-full mt-2 text-sm text-muted-foreground bg-white">
 													<SelectValue placeholder="Select an option" />
 												</SelectTrigger>
 

@@ -19,7 +19,6 @@ import { Calendar } from "@/components/ui/calendar";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FormEvent, useTransition, useState } from "react";
 import type { UIType } from "../form-builder-client";
-import { saveResponseAction } from "../actions/save-response-action";
 import { useRouter } from "next/navigation";
 
 export default function FormPageClient({ ui, id }: { ui: UIType[]; id: string }) {
@@ -180,15 +179,37 @@ export default function FormPageClient({ ui, id }: { ui: UIType[]; id: string })
 			...checkboxes,
 		};
 
-		const data = ui.map((i) => ({
-			id: i.id,
-			label: i.label,
-			value: formData[i.id] === "" ? null : formData[i.id],
-		}));
-		startTransition(async () => {
-			await saveResponseAction(id, data);
+		const data = ui.map((i) => {
+			let value = formData[i.id];
+
+			if (value instanceof Date) {
+				value = value.toISOString();
+			}
+
+			if (value instanceof File) {
+				value = value.name;
+			}
+
+			return {
+				id: i.id,
+				label: i.label,
+				value: value === "" || value === undefined ? null : value,
+			};
 		});
-		router.replace(`/success/${id}`);
+
+		startTransition(async () => {
+			const res = await fetch("/api/save-response", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ id, data }),
+			});
+			const resData = await res.json();
+			if (!res.ok) {
+				throw new Error("Issue saving response");
+			}
+			console.log(resData.success);
+			router.replace(`/success/${id}`);
+		});
 	};
 
 	return (
@@ -304,7 +325,7 @@ export default function FormPageClient({ ui, id }: { ui: UIType[]; id: string })
 													<Button
 														variant="outline"
 														id="date"
-														className="justify-between font-normal w-full text-[16px] text-muted-foreground hover:bg-white hover:text-muted-foreground"
+														className="justify-between font-normal w-full text-[14px] text-muted-foreground hover:bg-white hover:text-muted-foreground"
 													>
 														{dates[u.id]
 															? dates[u.id]?.toDateString()
@@ -387,7 +408,7 @@ export default function FormPageClient({ ui, id }: { ui: UIType[]; id: string })
 												aria-describedby={errors[u.id] ? `${u.label} error` : undefined}
 												aria-invalid={!!errors[u.id]}
 											>
-												<SelectTrigger className="w-full mt-2 text-[16px] text-muted-foreground bg-white">
+												<SelectTrigger className="w-full mt-2 text-[14px] text-muted-foreground bg-white">
 													<SelectValue placeholder="Select an option" />
 												</SelectTrigger>
 

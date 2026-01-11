@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { FormEvent, useEffect, useRef, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import GeneratedForm from "@/components/generated-form";
 import { Loader2 } from "lucide-react";
 
@@ -20,14 +20,20 @@ export default function FormBuilderClient() {
 	const [error, setError] = useState("");
 	const [ui, setUi] = useState<UIType[]>([]);
 	const inputRef = useRef<HTMLTextAreaElement>(null);
-	const [formId, setFormId] = useState("");
 	const [title, setTitle] = useState("");
 
+	const searchParams = useSearchParams();
 	const router = useRouter();
+	const pathname = usePathname();
+
+	const currentFormId = searchParams.get("id");
 
 	useEffect(() => {
 		inputRef.current?.focus();
 	}, []);
+
+	const activeUI = currentFormId ? ui : [];
+	const activeTitle = currentFormId ? title : "";
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -57,10 +63,12 @@ export default function FormBuilderClient() {
 				}
 
 				setUi(data.ui.fields);
-				setFormId(data.id);
 				setTitle(data.title);
 
-				router.refresh();
+				const params = new URLSearchParams(searchParams);
+				params.set("id", data.id);
+				router.push(`/${pathname}?${params.toString()}`);
+
 				if (inputRef.current) {
 					inputRef.current.value = "";
 				}
@@ -98,8 +106,9 @@ export default function FormBuilderClient() {
 
 				{error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 			</div>
-
-			{ui.length > 0 && <GeneratedForm ui={ui} title={title} formId={formId} />}
+			{ui.length > 0 && currentFormId && (
+				<GeneratedForm ui={activeUI} title={activeTitle} formId={currentFormId} />
+			)}
 		</div>
 	);
 }
