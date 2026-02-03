@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import DeleteButton from "./components/delete-button";
-import { getForms } from "@/lib/api/get-form";
+import { getForms } from "@/lib/api/get-forms";
 
 export default async function FormBuilder() {
 	return (

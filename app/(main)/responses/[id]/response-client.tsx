@@ -5,8 +5,8 @@ import { UIType } from "../../form-builder-client";
 import { Tabs } from "@base-ui/react/tabs";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "motion/react";
 
 export type ResponseType = {
 	id: string;
@@ -80,7 +80,7 @@ const ResponseAccordion = ({ responses }: { responses: ResponseType[] }) => {
 						<div
 							className={cn(
 								"flex items-center gap-2 transition-transform",
-								response.id === selectedId ? "rotate-180" : ""
+								response.id === selectedId ? "rotate-180" : "",
 							)}
 						>
 							<ChevronDown />

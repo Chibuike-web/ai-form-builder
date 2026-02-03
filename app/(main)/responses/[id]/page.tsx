@@ -1,9 +1,8 @@
-import { db } from "@/db";
 import ResponseClient from "./response-client";
 import { Suspense } from "react";
-import { eq } from "drizzle-orm";
 import { UIType } from "../../form-builder-client";
-import { form, response } from "@/db/schemas";
+import { type FormResponseSummary, getFormResponses } from "@/lib/api/get-responses";
+import { fetchForm } from "@/lib/api/fetch-form";
 
 export default function Responses({ params }: { params: Promise<{ id: string }> }) {
 	return (
@@ -15,13 +14,7 @@ export default function Responses({ params }: { params: Promise<{ id: string }> 
 
 const Form = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const { id } = await params;
-	const result = await db.query.form.findFirst({
-		where: eq(form.id, id),
-		columns: {
-			uiSchema: true,
-			title: true,
-		},
-	});
+	const result = await fetchForm(id);
 	if (!result) {
 		return <div>Form not found</div>;
 	}
@@ -29,15 +22,9 @@ const Form = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const uiSchema = result.uiSchema as { fields: UIType[] };
 	const title = result.title;
 
-	const formResponses = await db.query.response.findMany({
-		where: eq(response.formId, id),
-		columns: {
-			id: true,
-			data: true,
-		},
-	});
+	const formResponses = await getFormResponses(id);
 
-	const responses = formResponses.map((response) => ({
+	const responses = formResponses.map((response: FormResponseSummary) => ({
 		id: response.id,
 		data: typeof response.data === "string" ? JSON.parse(response.data) : response.data,
 	}));
