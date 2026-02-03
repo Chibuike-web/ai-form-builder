@@ -1,14 +1,16 @@
 import FormBuilderClient from "./form-builder-client";
-import { db } from "@/db";
+import { Suspense } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { cacheLife, cacheTag } from "next/cache";
 import DeleteButton from "./components/delete-button";
+import { getForms } from "@/lib/api/get-form";
 
-export default function FormBuilder() {
+export default async function FormBuilder() {
 	return (
 		<main className="max-w-6xl flex gap-10 mx-auto py-10 px-6 xl:px-0">
-			<FormBuilderClient />
+			<Suspense>
+				<FormBuilderClient />
+			</Suspense>
 			<span className="min-h-screen w-px bg-foreground/20" />
 			<Forms />
 		</main>
@@ -16,17 +18,7 @@ export default function FormBuilder() {
 }
 
 const Forms = async () => {
-	"use cache";
-	cacheLife("max");
-	cacheTag("forms");
-	const results = await db.query.form.findMany({
-		columns: {
-			id: true,
-			prompt: true,
-			uiSchema: true,
-			title: true,
-		},
-	});
+	const results = await getForms();
 	return (
 		<div className="w-full">
 			<h2 className="text-2xl font-semibold mb-4">Forms</h2>
@@ -48,7 +40,9 @@ const Forms = async () => {
 									View Responses
 								</Link>
 							</Button>
-							<DeleteButton id={form.id} />
+							<Suspense>
+								<DeleteButton id={form.id} />
+							</Suspense>
 						</div>
 					</div>
 				))

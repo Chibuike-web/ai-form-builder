@@ -42,6 +42,5 @@ const Form = async ({ params }: { params: Promise<{ id: string }> }) => {
 		data: typeof response.data === "string" ? JSON.parse(response.data) : response.data,
 	}));
 
-	console.log(responses);
 	return <ResponseClient ui={uiSchema.fields} title={title} id={id} responses={responses} />;
 };

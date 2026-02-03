@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { FormEvent, useEffect, useRef, useState, useTransition } from "react";
+import { SyntheticEvent, useEffect, useRef, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import GeneratedForm from "@/components/generated-form";
 import { Loader2 } from "lucide-react";
@@ -35,7 +35,7 @@ export default function FormBuilderClient() {
 	const activeUI = currentFormId ? ui : [];
 	const activeTitle = currentFormId ? title : "";
 
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setError("");
 		setUi([]);
